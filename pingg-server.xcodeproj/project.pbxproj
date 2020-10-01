@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -12,6 +12,9 @@
 		124F0625252626640035114C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 124F0624252626640035114C /* Assets.xcassets */; };
 		124F0628252626640035114C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 124F0627252626640035114C /* Preview Assets.xcassets */; };
 		124F062B252626640035114C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 124F0629252626640035114C /* Main.storyboard */; };
+		12FED78A252630EC00902C99 /* CloudStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FED789252630EC00902C99 /* CloudStorage.swift */; };
+		12FED78D252630F900902C99 /* WebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FED78C252630F900902C99 /* WebServer.swift */; };
+		32AAE9B12BFE3A94DF7C1A33 /* Pods_pingg_server.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5661D647DF32AA505F6C7A83 /* Pods_pingg_server.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +26,11 @@
 		124F062A252626640035114C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		124F062C252626640035114C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		124F062D252626640035114C /* pingg_server.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = pingg_server.entitlements; sourceTree = "<group>"; };
+		12FED789252630EC00902C99 /* CloudStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudStorage.swift; sourceTree = "<group>"; };
+		12FED78C252630F900902C99 /* WebServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServer.swift; sourceTree = "<group>"; };
+		5661D647DF32AA505F6C7A83 /* Pods_pingg_server.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_pingg_server.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		65A6602722721918DE33CCA6 /* Pods-pingg-server.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pingg-server.debug.xcconfig"; path = "Target Support Files/Pods-pingg-server/Pods-pingg-server.debug.xcconfig"; sourceTree = "<group>"; };
+		7E2AFDA87A04A1AF9B71E871 /* Pods-pingg-server.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pingg-server.release.xcconfig"; path = "Target Support Files/Pods-pingg-server/Pods-pingg-server.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -30,6 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				32AAE9B12BFE3A94DF7C1A33 /* Pods_pingg_server.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,6 +50,8 @@
 			children = (
 				124F061F252626630035114C /* pingg-server */,
 				124F061E252626630035114C /* Products */,
+				7A964BD6893E3B99AF4CAD65 /* Pods */,
+				D3397ACD6CBC1E362E719A56 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -57,6 +68,7 @@
 			children = (
 				124F0620252626630035114C /* AppDelegate.swift */,
 				124F0622252626630035114C /* ContentView.swift */,
+				12FED78F2526310E00902C99 /* Services */,
 				124F0624252626640035114C /* Assets.xcassets */,
 				124F0629252626640035114C /* Main.storyboard */,
 				124F062C252626640035114C /* Info.plist */,
@@ -74,6 +86,32 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		12FED78F2526310E00902C99 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				12FED78C252630F900902C99 /* WebServer.swift */,
+				12FED789252630EC00902C99 /* CloudStorage.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		7A964BD6893E3B99AF4CAD65 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				65A6602722721918DE33CCA6 /* Pods-pingg-server.debug.xcconfig */,
+				7E2AFDA87A04A1AF9B71E871 /* Pods-pingg-server.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		D3397ACD6CBC1E362E719A56 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5661D647DF32AA505F6C7A83 /* Pods_pingg_server.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -81,9 +119,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 124F0630252626640035114C /* Build configuration list for PBXNativeTarget "pingg-server" */;
 			buildPhases = (
+				F42C672574CED83A9C5A30E6 /* [CP] Check Pods Manifest.lock */,
 				124F0619252626630035114C /* Sources */,
 				124F061A252626630035114C /* Frameworks */,
 				124F061B252626630035114C /* Resources */,
+				348FF859E531A6227A75FEBC /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -139,13 +179,57 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		348FF859E531A6227A75FEBC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-pingg-server/Pods-pingg-server-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-pingg-server/Pods-pingg-server-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-pingg-server/Pods-pingg-server-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F42C672574CED83A9C5A30E6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-pingg-server-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		124F0619252626630035114C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12FED78A252630EC00902C99 /* CloudStorage.swift in Sources */,
 				124F0623252626630035114C /* ContentView.swift in Sources */,
 				124F0621252626630035114C /* AppDelegate.swift in Sources */,
+				12FED78D252630F900902C99 /* WebServer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,6 +364,7 @@
 		};
 		124F0631252626640035114C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 65A6602722721918DE33CCA6 /* Pods-pingg-server.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -304,6 +389,7 @@
 		};
 		124F0632252626640035114C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7E2AFDA87A04A1AF9B71E871 /* Pods-pingg-server.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
