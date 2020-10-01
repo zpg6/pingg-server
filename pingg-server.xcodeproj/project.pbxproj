@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		124A6749252632CC001D5F60 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 124A6748252632CC001D5F60 /* GoogleService-Info.plist */; };
+		124A6750252638D1001D5F60 /* Env.plist in Resources */ = {isa = PBXBuildFile; fileRef = 124A674F252638D1001D5F60 /* Env.plist */; };
+		124A6754252640D4001D5F60 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124A6753252640D4001D5F60 /* Game.swift */; };
 		124F0621252626630035114C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124F0620252626630035114C /* AppDelegate.swift */; };
 		124F0623252626630035114C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124F0622252626630035114C /* ContentView.swift */; };
 		124F0625252626640035114C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 124F0624252626640035114C /* Assets.xcassets */; };
@@ -18,6 +21,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		124A6748252632CC001D5F60 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		124A674F252638D1001D5F60 /* Env.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Env.plist; sourceTree = "<group>"; };
+		124A6753252640D4001D5F60 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		124F061D252626630035114C /* pingg-server.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "pingg-server.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		124F0620252626630035114C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		124F0622252626630035114C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -45,6 +51,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		124A6752252640C9001D5F60 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				124A6753252640D4001D5F60 /* Game.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		124F0614252626630035114C = {
 			isa = PBXGroup;
 			children = (
@@ -66,12 +80,15 @@
 		124F061F252626630035114C /* pingg-server */ = {
 			isa = PBXGroup;
 			children = (
+				124A6752252640C9001D5F60 /* Models */,
 				124F0620252626630035114C /* AppDelegate.swift */,
 				124F0622252626630035114C /* ContentView.swift */,
 				12FED78F2526310E00902C99 /* Services */,
 				124F0624252626640035114C /* Assets.xcassets */,
 				124F0629252626640035114C /* Main.storyboard */,
 				124F062C252626640035114C /* Info.plist */,
+				124A6748252632CC001D5F60 /* GoogleService-Info.plist */,
+				124A674F252638D1001D5F60 /* Env.plist */,
 				124F062D252626640035114C /* pingg_server.entitlements */,
 				124F0626252626640035114C /* Preview Content */,
 			);
@@ -171,7 +188,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				124A6750252638D1001D5F60 /* Env.plist in Resources */,
 				124F062B252626640035114C /* Main.storyboard in Resources */,
+				124A6749252632CC001D5F60 /* GoogleService-Info.plist in Resources */,
 				124F0628252626640035114C /* Preview Assets.xcassets in Resources */,
 				124F0625252626640035114C /* Assets.xcassets in Resources */,
 			);
@@ -227,6 +246,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				12FED78A252630EC00902C99 /* CloudStorage.swift in Sources */,
+				124A6754252640D4001D5F60 /* Game.swift in Sources */,
 				124F0623252626630035114C /* ContentView.swift in Sources */,
 				124F0621252626630035114C /* AppDelegate.swift in Sources */,
 				12FED78D252630F900902C99 /* WebServer.swift in Sources */,

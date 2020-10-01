@@ -7,5 +7,7 @@ target 'pingg-server' do
 
   # Pods for pingg-server
   pod 'GCDWebServer'
+  pod 'Firebase/Auth',:modular_headers => true
+  pod 'Firebase/Storage',:modular_headers => true
 
 end
