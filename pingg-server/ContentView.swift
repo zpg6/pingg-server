@@ -8,9 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
-        Text("Hello, World!")
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        Image("pingg-server-\(colorScheme == .dark ? "white":"black")")
+            .resizable()
+            .frame(width: 200, height: 116)
+            .padding(50)
     }
 }
 
