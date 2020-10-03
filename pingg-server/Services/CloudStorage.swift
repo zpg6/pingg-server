@@ -12,9 +12,11 @@ class CloudStorage {
     
     static let main = CloudStorage()
     
-    var database: [Int64:Game] = [1:Game()]
+    var database: [Int64:Game] = [:]
     var lastUpdated: Date? = nil
     var timer: Timer? = nil
+    var numGamesPerGenre: [String:Int64] = [:]
+    var numGamesPerPlatform: [String:Int64] = [:]
     
     class func setup() {
         CloudStorage.download()
@@ -35,6 +37,20 @@ class CloudStorage {
                         if let gameData = Data(base64Encoded: arr[index]) {
                             if let game = try? JSONDecoder().decode(Game.self, from: gameData) {
                                 CloudStorage.main.database[game.id] = game
+                                for genre in game.genres {
+                                    if CloudStorage.main.numGamesPerGenre.keys.contains(genre) {
+                                        CloudStorage.main.numGamesPerGenre[genre] = CloudStorage.main.numGamesPerGenre[genre]! + 1
+                                    } else {
+                                        CloudStorage.main.numGamesPerGenre[genre] = 1
+                                    }
+                                }
+                                for platform in game.platforms {
+                                    if CloudStorage.main.numGamesPerPlatform.keys.contains(platform) {
+                                        CloudStorage.main.numGamesPerPlatform[platform] = CloudStorage.main.numGamesPerPlatform[platform]! + 1
+                                    } else {
+                                        CloudStorage.main.numGamesPerPlatform[platform] = 1
+                                    }
+                                }
                             } else {
                                 print("couldn't decode gameData into a game for index=\(index)")
                             }
