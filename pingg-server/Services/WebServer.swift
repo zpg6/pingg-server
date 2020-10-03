@@ -75,7 +75,7 @@ class WebServer {
                     if let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments){
                         if let dict = json as? [String:Any] {
                             if let game = Game.from(dict) {
-                                CloudStorage.main.database[game.id] = game
+                                CloudStorage.main.database[String(game.id)] = game
                                 return GCDWebServerDataResponse(jsonObject: game.json)?.addHeaders()
                             } else {
                                 return GCDWebServerErrorResponse(text: "Missing ID field")?.addHeaders()
