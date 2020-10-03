@@ -12,14 +12,14 @@ class CloudStorage {
     
     static let main = CloudStorage()
     
-    var database: [Int64:Game] = [:]
+    var database: [Int64:Game] = [1:Game()]
     var lastUpdated: Date? = nil
     var timer: Timer? = nil
     
     class func setup() {
         CloudStorage.download()
         CloudStorage.main.timer = Timer(timeInterval: 60*60, repeats: true) { (_) in
-            CloudStorage.download()
+            CloudStorage.upload()
         }
     }
     
@@ -32,7 +32,7 @@ class CloudStorage {
             if let data = data {
                 if let arr = try? JSONDecoder().decode([String].self, from: data) {
                     for index in 0..<arr.count {
-                        if let gameData = arr[index].data(using: .utf8) {
+                        if let gameData = Data(base64Encoded: arr[index]) {
                             if let game = try? JSONDecoder().decode(Game.self, from: gameData) {
                                 CloudStorage.main.database[game.id] = game
                             } else {
@@ -49,6 +49,18 @@ class CloudStorage {
             } else {
                 print("couldn't retrieve database.json")
             }
+        }
+    }
+    
+    class func upload() {
+        var gameArray = [String]()
+        for (key ,game) in CloudStorage.main.database {
+            if(key != 0){
+            gameArray.append((try? JSONEncoder().encode(game).base64EncodedString()) ?? "")
+            }
+        }
+        if let data = gameArray.description.data(using: .utf8){
+            Storage.storage().reference(withPath: "database.json").putData(data)
         }
     }
 }

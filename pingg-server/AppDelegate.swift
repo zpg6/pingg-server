@@ -63,6 +63,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             print("unable to get credentials")
             //NSControl().sendAction(#selector(NSXPCConnection.suspend), to: NSApplication.shared)
         }
+        
+        WebServer.startup()
 
     }
     
