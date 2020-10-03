@@ -11,8 +11,7 @@ import Firebase
 class CloudStorage {
     
     static let main = CloudStorage()
-    
-    var database: [Int64:Game] = [:]
+    var database: [String:Game] = [:]
     var lastUpdated: Date? = nil
     var timer: Timer? = nil
     var numGamesPerGenre: [String:Int64] = [:]
@@ -36,7 +35,7 @@ class CloudStorage {
                     for index in 0..<arr.count {
                         if let gameData = Data(base64Encoded: arr[index]) {
                             if let game = try? JSONDecoder().decode(Game.self, from: gameData) {
-                                CloudStorage.main.database[game.id] = game
+                                CloudStorage.main.database[String(game.id)] = game
                                 for genre in game.genres {
                                     if CloudStorage.main.numGamesPerGenre.keys.contains(genre) {
                                         CloudStorage.main.numGamesPerGenre[genre] = CloudStorage.main.numGamesPerGenre[genre]! + 1
@@ -71,9 +70,7 @@ class CloudStorage {
     class func upload() {
         var gameArray = [String]()
         for (key ,game) in CloudStorage.main.database {
-            if(key != 0){
             gameArray.append((try? JSONEncoder().encode(game).base64EncodedString()) ?? "")
-            }
         }
         if let data = gameArray.description.data(using: .utf8){
             Storage.storage().reference(withPath: "database.json").putData(data)
