@@ -9,7 +9,7 @@ import Foundation
 
 extension Game {
 
-    static func from(_ object: [String:Any]) -> Game {
+    static func from(_ object: [String:Any]) -> Game? {
         
         var game = Game()
         
