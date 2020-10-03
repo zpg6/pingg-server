@@ -75,7 +75,7 @@ class WebServer {
                     if let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments){
                         if let dict = json as? [String:Any] {
                             if let game = Game.from(dict) {
-                                CloudStorage.main.database[String(game.id)] = game
+                                CloudStorage.main.database[String(game.id)] = game.json
                                 return GCDWebServerDataResponse(jsonObject: game.json)?.addHeaders()
                             } else {
                                 return GCDWebServerErrorResponse(text: "Missing ID field")?.addHeaders()
@@ -165,7 +165,6 @@ extension GCDWebServerDataResponse {
         response.setValue("GET, POST, PUT, HEAD, OPTIONS", forAdditionalHeader: "Access-Control-Allow-Methods")
         response.setValue("Content-Type", forAdditionalHeader: "Access-Control-Allow-Headers")
         response.setValue("true", forAdditionalHeader: "Access-Control-Allow-Credentials")
-        print("📣 \(response)")
         return response
     }
 }
