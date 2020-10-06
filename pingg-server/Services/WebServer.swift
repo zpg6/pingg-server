@@ -75,14 +75,14 @@ class WebServer {
         }
         
         WebServer.main.server.addHandler(forMethod: "GET", path: "/most-rated", request: GCDWebServerDataRequest.self) { (request) -> GCDWebServerDataResponse? in
-            var topRatedMap = [String:[String:Any]]()
+            var mostRatedMap = [String:[String:Any]]()
             let database = CloudStorage.main.database
             let array = database.map({$0.value}).sorted(by: {Game.from($0)!.ratingCount > Game.from($1)!.ratingCount})
             for i in 0...array.count {
-                topRatedMap[String(i)] = array[i]
+                mostRatedMap[String(i)] = array[i]
             }
 
-            let response = GCDWebServerDataResponse(jsonObject: topRatedMap)
+            let response = GCDWebServerDataResponse(jsonObject: mostRatedMap)
                     if let response = response?.addHeaders() {
                         return response
                     } else {
@@ -92,39 +92,52 @@ class WebServer {
         
         }
         
-//        WebServer.main.server.addHandler(forMethod: "OPTIONS", path: "/genre", request: GCDWebServerDataRequest.self) { (request) -> GCDWebServerDataResponse? in
-//                let response = GCDWebServerDataResponse(jsonObject: [:])
-//                if let response = response?.addHeaders() {
-//                    return response
-//                } else {
-//                    print("Error adding headers")
-//                }
-//                return response
-//            }
-//        
-//            WebServer.main.server.addHandler(forMethod: "POST", path: "/genre", request: GCDWebServerDataRequest.self) { (request) -> GCDWebServerDataResponse? in
-//        
-//                print(request)
-//        
-//                if let requestData = request as? GCDWebServerDataRequest {
-//                    let data = requestData.data
-//                    if let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments){
-//                        if let dict = json as? [String:Any] {
-//                            if let genre = dict["genre"] as? String {
-//                                
-//                            } else {
-//                                return GCDWebServerErrorResponse(text: "Missing Genre Field")?.addHeaders()
-//                            }
-//                        } else {
-//                            return GCDWebServerErrorResponse(text: "Could not cast data.")?.addHeaders()
-//                        }
-//                    } else {
-//                        return GCDWebServerErrorResponse(text: "Could not serialize data.")?.addHeaders()
-//                    }
-//                } else {
-//                    return GCDWebServerErrorResponse(text: "Could not cast data.")?.addHeaders()
-//                }
-//            }
+        WebServer.main.server.addHandler(forMethod: "OPTIONS", path: "/genre", request: GCDWebServerDataRequest.self) { (request) -> GCDWebServerDataResponse? in
+                let response = GCDWebServerDataResponse(jsonObject: [:])
+                if let response = response?.addHeaders() {
+                    return response
+                } else {
+                    print("Error adding headers")
+                }
+                return response
+            }
+
+            WebServer.main.server.addHandler(forMethod: "POST", path: "/genre", request: GCDWebServerDataRequest.self) { (request) -> GCDWebServerDataResponse? in
+
+                print(request)
+
+                if let requestData = request as? GCDWebServerDataRequest {
+                    let data = requestData.data
+                    if let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments){
+                        if let dict = json as? [String:Any] {
+                            if let genre = dict["genre"] as? String {
+                                var genreDict = [String:[String:Any]]()
+                                let database = CloudStorage.main.database
+                                let array = database.filter({
+                                    if let genreArray = $0.value["genre"] as? Array<String> {
+                                        return genreArray.contains(genre)
+                                    }
+                                    return false
+                                })
+                                var i=0
+                                for (_, value) in array {
+                                    genreDict[String(i)] = value
+                                    i+=1
+                                }
+                                return GCDWebServerDataResponse(jsonObject: genreDict)?.addHeaders()
+                            } else {
+                                return GCDWebServerErrorResponse(text: "Missing Genre Field")?.addHeaders()
+                            }
+                        } else {
+                            return GCDWebServerErrorResponse(text: "Could not cast data.")?.addHeaders()
+                        }
+                    } else {
+                        return GCDWebServerErrorResponse(text: "Could not serialize data.")?.addHeaders()
+                    }
+                } else {
+                    return GCDWebServerErrorResponse(text: "Could not cast data.")?.addHeaders()
+                }
+            }
         
         
         
