@@ -29,6 +29,10 @@ extension MiniGame {
             miniGame.rating = rating
         }
         
+        if let searchableIndex = object["searchableIndex"] as? [String:Bool] {
+            miniGame.searchableIndex = searchableIndex
+        }
+        
         return miniGame
     }
     
@@ -44,6 +48,8 @@ extension MiniGame {
         
         miniGame.rating = object.rating
         
+        miniGame.searchableIndex = object.searchableIndex
+        
         return miniGame
     }
 
@@ -55,6 +61,7 @@ extension MiniGame {
         result["name"] = self.name
         result["coverURL"] = self.coverURL
         result["rating"] = self.rating
+        result["searchableIndex"] = self.searchableIndex
         
         return result
     }

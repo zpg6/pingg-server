@@ -12,4 +12,5 @@ struct MiniGame: Codable {
     var name: String = ""
     var coverURL: String = ""
     var rating: Double = 0.0
+    var searchableIndex: [String:Bool] = [:]
 }
