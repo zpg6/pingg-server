@@ -34,6 +34,17 @@ class WebServer {
         
                 }
         
+        WebServer.main.server.addHandler(forMethod: "GET", path: "/mini-game-database", request: GCDWebServerDataRequest.self) { (request) -> GCDWebServerDataResponse? in
+            let response = GCDWebServerDataResponse(jsonObject: CloudStorage.main.miniGameDatabase)
+                    if let response = response?.addHeaders() {
+                        return response
+                    } else {
+                        print("Error adding headers")
+                    }
+                    return response
+        
+                }
+        
         WebServer.main.server.addHandler(forMethod: "GET", path: "/count/genres", request: GCDWebServerDataRequest.self) { (request) -> GCDWebServerDataResponse? in
             let response = GCDWebServerDataResponse(jsonObject: CloudStorage.main.numGamesPerGenre)
                     if let response = response?.addHeaders() {

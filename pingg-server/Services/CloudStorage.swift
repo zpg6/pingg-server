@@ -12,6 +12,7 @@ class CloudStorage {
     
     static let main = CloudStorage()
     var database: [String:[String:Any]] = [:]
+    var miniGameDatabase: [String:[String:Any]] = [:]
     var lastUpdated: Date? = nil
     var timer: Timer? = nil
     var numGamesPerGenre: [String:Int64] = [:]
@@ -36,6 +37,7 @@ class CloudStorage {
                         if let gameData = Data(base64Encoded: arr[index]) {
                             if let game = try? JSONDecoder().decode(Game.self, from: gameData) {
                                 CloudStorage.main.database[String(game.id)] = game.json
+                                CloudStorage.main.miniGameDatabase[String(game.id)] = MiniGame.fromGame(game).json
                                 for genre in game.genres {
                                     if CloudStorage.main.numGamesPerGenre.keys.contains(genre) {
                                         CloudStorage.main.numGamesPerGenre[genre] = CloudStorage.main.numGamesPerGenre[genre]! + 1

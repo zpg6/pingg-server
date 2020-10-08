@@ -19,6 +19,8 @@
 		12FED78D252630F900902C99 /* WebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FED78C252630F900902C99 /* WebServer.swift */; };
 		32AAE9B12BFE3A94DF7C1A33 /* Pods_pingg_server.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5661D647DF32AA505F6C7A83 /* Pods_pingg_server.framework */; };
 		73777EDB252925BC00B74CD5 /* GameExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73777EDA252925BC00B74CD5 /* GameExtensions.swift */; };
+		73777EDE252F9EAF00B74CD5 /* MiniGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73777EDD252F9EAF00B74CD5 /* MiniGame.swift */; };
+		73777EE1252F9F4700B74CD5 /* MiniGameExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73777EE0252F9F4700B74CD5 /* MiniGameExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +40,8 @@
 		5661D647DF32AA505F6C7A83 /* Pods_pingg_server.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_pingg_server.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		65A6602722721918DE33CCA6 /* Pods-pingg-server.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pingg-server.debug.xcconfig"; path = "Target Support Files/Pods-pingg-server/Pods-pingg-server.debug.xcconfig"; sourceTree = "<group>"; };
 		73777EDA252925BC00B74CD5 /* GameExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameExtensions.swift; sourceTree = "<group>"; };
+		73777EDD252F9EAF00B74CD5 /* MiniGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniGame.swift; sourceTree = "<group>"; };
+		73777EE0252F9F4700B74CD5 /* MiniGameExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniGameExtensions.swift; sourceTree = "<group>"; };
 		7E2AFDA87A04A1AF9B71E871 /* Pods-pingg-server.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pingg-server.release.xcconfig"; path = "Target Support Files/Pods-pingg-server/Pods-pingg-server.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -58,6 +62,8 @@
 			children = (
 				124A6753252640D4001D5F60 /* Game.swift */,
 				73777EDA252925BC00B74CD5 /* GameExtensions.swift */,
+				73777EDD252F9EAF00B74CD5 /* MiniGame.swift */,
+				73777EE0252F9F4700B74CD5 /* MiniGameExtensions.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -250,10 +256,12 @@
 			files = (
 				12FED78A252630EC00902C99 /* CloudStorage.swift in Sources */,
 				124A6754252640D4001D5F60 /* Game.swift in Sources */,
+				73777EE1252F9F4700B74CD5 /* MiniGameExtensions.swift in Sources */,
 				124F0623252626630035114C /* ContentView.swift in Sources */,
 				124F0621252626630035114C /* AppDelegate.swift in Sources */,
 				12FED78D252630F900902C99 /* WebServer.swift in Sources */,
 				73777EDB252925BC00B74CD5 /* GameExtensions.swift in Sources */,
+				73777EDE252F9EAF00B74CD5 /* MiniGame.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
