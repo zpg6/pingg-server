@@ -12,6 +12,7 @@ class WebServer {
     
     static let main = WebServer()
     var server = GCDWebServer()
+    let returnSize = 7
     
     class func startup() {
         WebServer.main.server.addDefaultHandler(forMethod: "GET", request: GCDWebServerRequest.self, processBlock: {request in
@@ -67,39 +68,112 @@ class WebServer {
         
                 }
         
-        WebServer.main.server.addHandler(forMethod: "GET", path: "/top-rated", request: GCDWebServerDataRequest.self) { (request) -> GCDWebServerDataResponse? in
-            var topRatedMap = [String:[String:Any]]()
-            let database = CloudStorage.main.database
-            let array = database.map({$0.value}).sorted(by: {Game.from($0)!.rating > Game.from($1)!.rating})
-            for i in 0...array.count {
-                topRatedMap[String(i)] = array[i]
-            }
-
-            let response = GCDWebServerDataResponse(jsonObject: topRatedMap)
-                    if let response = response?.addHeaders() {
-                        return response
-                    } else {
-                        print("Error adding headers")
-                    }
+        WebServer.main.server.addHandler(forMethod: "OPTIONS", path: "/top-rated", request: GCDWebServerDataRequest.self) { (request) -> GCDWebServerDataResponse? in
+                let response = GCDWebServerDataResponse(jsonObject: [:])
+                if let response = response?.addHeaders() {
                     return response
+                } else {
+                    print("Error adding headers")
+                }
+                return response
+            }
         
+        WebServer.main.server.addHandler(forMethod: "POST", path: "/top-rated", request: GCDWebServerDataRequest.self) { (request) -> GCDWebServerDataResponse? in
+            
+            if let requestData = request as? GCDWebServerDataRequest {
+                let data = requestData.data
+                if let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments){
+                    if let dict = json as? [String:Any] {
+                        if let offset = dict["offset"] as? Int {
+                            let database = CloudStorage.main.database
+                            let array = database.map({$0.value}).sorted(by: {Game.from($0)!.rating > Game.from($1)!.rating})
+                            var returnArray = [[String:Any]]()
+                            var j=0
+                            let maxNum = (offset + WebServer.main.returnSize) > CloudStorage.main.database.count ? CloudStorage.main.database.count : (offset + WebServer.main.returnSize)
+                            for i in offset...maxNum {
+                                let fullGameJSON = array[i]
+                                if let id = fullGameJSON["id"] as? String {
+                                    if let miniGame = CloudStorage.main.miniGameDatabase[id] {
+                                        returnArray[j] = miniGame
+                                        j+=1
+                                    }
+                                }
+                            }
+                            
+
+                            let response = GCDWebServerDataResponse(jsonObject: returnArray)
+                                    if let response = response?.addHeaders() {
+                                        return response
+                                    } else {
+                                        print("Error adding headers")
+                                    }
+                                    return response
+                        } else {
+                            return GCDWebServerErrorResponse(text: "Missing Offset Field")?.addHeaders()
+                        }
+                    } else {
+                        return GCDWebServerErrorResponse(text: "Could not cast data.")?.addHeaders()
+                    }
+                } else {
+                    return GCDWebServerErrorResponse(text: "Could not serialize data.")?.addHeaders()
+                }
+            } else {
+                return GCDWebServerErrorResponse(text: "Could not cast data.")?.addHeaders()
+            }
         }
         
-        WebServer.main.server.addHandler(forMethod: "GET", path: "/most-rated", request: GCDWebServerDataRequest.self) { (request) -> GCDWebServerDataResponse? in
-            var mostRatedMap = [String:[String:Any]]()
-            let database = CloudStorage.main.database
-            let array = database.map({$0.value}).sorted(by: {Game.from($0)!.ratingCount > Game.from($1)!.ratingCount})
-            for i in 0...array.count {
-                mostRatedMap[String(i)] = array[i]
-            }
-
-            let response = GCDWebServerDataResponse(jsonObject: mostRatedMap)
-                    if let response = response?.addHeaders() {
-                        return response
-                    } else {
-                        print("Error adding headers")
-                    }
+        WebServer.main.server.addHandler(forMethod: "OPTIONS", path: "/most-rated", request: GCDWebServerDataRequest.self) { (request) -> GCDWebServerDataResponse? in
+                let response = GCDWebServerDataResponse(jsonObject: [:])
+                if let response = response?.addHeaders() {
                     return response
+                } else {
+                    print("Error adding headers")
+                }
+                return response
+            }
+        
+        WebServer.main.server.addHandler(forMethod: "POST", path: "/most-rated", request: GCDWebServerDataRequest.self) { (request) -> GCDWebServerDataResponse? in
+            
+            if let requestData = request as? GCDWebServerDataRequest {
+                let data = requestData.data
+                if let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments){
+                    if let dict = json as? [String:Any] {
+                        if let offset = dict["offset"] as? Int {
+                            let database = CloudStorage.main.database
+                            let array = database.map({$0.value}).sorted(by: {Game.from($0)!.ratingCount > Game.from($1)!.ratingCount})
+                            var returnArray = [[String:Any]]()
+                            var j=0
+                            let maxNum = (offset + WebServer.main.returnSize) > CloudStorage.main.database.count ? CloudStorage.main.database.count : (offset + WebServer.main.returnSize)
+                            for i in offset...maxNum {
+                                let fullGameJSON = array[i]
+                                if let id = fullGameJSON["id"] as? String {
+                                    if let miniGame = CloudStorage.main.miniGameDatabase[id] {
+                                        returnArray[j] = miniGame
+                                        j+=1
+                                    }
+                                }
+                            }
+                            
+
+                            let response = GCDWebServerDataResponse(jsonObject: returnArray)
+                                    if let response = response?.addHeaders() {
+                                        return response
+                                    } else {
+                                        print("Error adding headers")
+                                    }
+                                    return response
+                        } else {
+                            return GCDWebServerErrorResponse(text: "Missing Offset Field")?.addHeaders()
+                        }
+                    } else {
+                        return GCDWebServerErrorResponse(text: "Could not cast data.")?.addHeaders()
+                    }
+                } else {
+                    return GCDWebServerErrorResponse(text: "Could not serialize data.")?.addHeaders()
+                }
+            } else {
+                return GCDWebServerErrorResponse(text: "Could not cast data.")?.addHeaders()
+            }
         
         }
         
@@ -122,20 +196,31 @@ class WebServer {
                     if let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments){
                         if let dict = json as? [String:Any] {
                             if let genre = dict["genre"] as? String {
-                                var genreDict = [String:[String:Any]]()
-                                let database = CloudStorage.main.database
-                                let array = database.filter({
-                                    if let genreArray = $0.value["genre"] as? Array<String> {
-                                        return genreArray.contains(genre)
+                                if let offset = dict["offset"] as? Int {
+                                    let database = CloudStorage.main.database
+                                    let dictionary = database.filter({
+                                        if let genreArray = $0.value["genre"] as? Array<String> {
+                                            return genreArray.contains(genre)
+                                        }
+                                        return false
+                                    })
+                                    let array : [[String:Any]] = Array(dictionary.values)
+                                    var j=0
+                                    var returnArray = [[String:Any]]()
+                                    let maxNum = (offset + WebServer.main.returnSize) > CloudStorage.main.database.count ? CloudStorage.main.database.count : (offset + WebServer.main.returnSize)
+                                    for i in offset...maxNum {
+                                        let fullGameJSON = array[i]
+                                        if let id = fullGameJSON["id"] as? String {
+                                            if let miniGame = CloudStorage.main.miniGameDatabase[id] {
+                                                returnArray[j] = miniGame
+                                                j+=1
+                                            }
+                                        }
                                     }
-                                    return false
-                                })
-                                var i=0
-                                for (_, value) in array {
-                                    genreDict[String(i)] = value
-                                    i+=1
+                                    return GCDWebServerDataResponse(jsonObject: returnArray)?.addHeaders()
+                                } else {
+                                    return GCDWebServerErrorResponse(text: "Missing Offset Field")?.addHeaders()
                                 }
-                                return GCDWebServerDataResponse(jsonObject: genreDict)?.addHeaders()
                             } else {
                                 return GCDWebServerErrorResponse(text: "Missing Genre Field")?.addHeaders()
                             }
