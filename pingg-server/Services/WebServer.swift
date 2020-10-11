@@ -87,14 +87,14 @@ class WebServer {
                         if let offset = dict["offset"] as? Int {
                             let database = CloudStorage.main.database
                             let array = database.map({$0.value}).sorted(by: {Game.from($0)!.rating > Game.from($1)!.rating})
-                            var returnArray = [[String:Any]]()
+                            var returnArray: [[String:Any]] = []
                             var j=0
                             let maxNum = (offset + WebServer.main.returnSize) > CloudStorage.main.database.count ? CloudStorage.main.database.count : (offset + WebServer.main.returnSize)
                             for i in offset...maxNum {
                                 let fullGameJSON = array[i]
-                                if let id = fullGameJSON["id"] as? String {
-                                    if let miniGame = CloudStorage.main.miniGameDatabase[id] {
-                                        returnArray[j] = miniGame
+                                if let id = fullGameJSON["id"] as? Int64 {
+                                    if let miniGame = CloudStorage.main.miniGameDatabase[String(id)] {
+                                        returnArray.append(miniGame)
                                         j+=1
                                     }
                                 }
@@ -103,6 +103,7 @@ class WebServer {
 
                             let response = GCDWebServerDataResponse(jsonObject: returnArray)
                                     if let response = response?.addHeaders() {
+                                        //print(response)
                                         return response
                                     } else {
                                         print("Error adding headers")
@@ -141,14 +142,14 @@ class WebServer {
                         if let offset = dict["offset"] as? Int {
                             let database = CloudStorage.main.database
                             let array = database.map({$0.value}).sorted(by: {Game.from($0)!.ratingCount > Game.from($1)!.ratingCount})
-                            var returnArray = [[String:Any]]()
+                            var returnArray: [[String:Any]] = []
                             var j=0
                             let maxNum = (offset + WebServer.main.returnSize) > CloudStorage.main.database.count ? CloudStorage.main.database.count : (offset + WebServer.main.returnSize)
                             for i in offset...maxNum {
                                 let fullGameJSON = array[i]
-                                if let id = fullGameJSON["id"] as? String {
-                                    if let miniGame = CloudStorage.main.miniGameDatabase[id] {
-                                        returnArray[j] = miniGame
+                                if let id = fullGameJSON["id"] as? Int64 {
+                                    if let miniGame = CloudStorage.main.miniGameDatabase[String(id)] {
+                                        returnArray.append(miniGame)
                                         j+=1
                                     }
                                 }
@@ -157,6 +158,7 @@ class WebServer {
 
                             let response = GCDWebServerDataResponse(jsonObject: returnArray)
                                     if let response = response?.addHeaders() {
+                                        //print(response)
                                         return response
                                     } else {
                                         print("Error adding headers")
@@ -197,23 +199,25 @@ class WebServer {
                         if let dict = json as? [String:Any] {
                             if let genre = dict["genre"] as? String {
                                 if let offset = dict["offset"] as? Int {
+                                    var array : [[String:Any]] = []
                                     let database = CloudStorage.main.database
-                                    let dictionary = database.filter({
-                                        if let genreArray = $0.value["genre"] as? Array<String> {
-                                            return genreArray.contains(genre)
+                                    for (_, value) in database {
+                                        if let genres = value["genres"] as? Array<String> {
+                                            if genres.contains(genre) {
+                                                array.append(value)
+                                            }
                                         }
-                                        return false
-                                    })
-                                    let array : [[String:Any]] = Array(dictionary.values)
-                                    var j=0
+                                    }
                                     var returnArray = [[String:Any]]()
                                     let maxNum = (offset + WebServer.main.returnSize) > CloudStorage.main.database.count ? CloudStorage.main.database.count : (offset + WebServer.main.returnSize)
-                                    for i in offset...maxNum {
-                                        let fullGameJSON = array[i]
-                                        if let id = fullGameJSON["id"] as? String {
-                                            if let miniGame = CloudStorage.main.miniGameDatabase[id] {
-                                                returnArray[j] = miniGame
-                                                j+=1
+                                    if array.count > 0 {
+                                        for i in offset...maxNum {
+                                            print("array size: " + String(array.count))
+                                            let fullGameJSON = array[i]
+                                            if let id = fullGameJSON["id"] as? Int64 {
+                                                if let miniGame = CloudStorage.main.miniGameDatabase[String(id)] {
+                                                    returnArray.append(miniGame)
+                                                }
                                             }
                                         }
                                     }
