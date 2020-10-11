@@ -91,11 +91,13 @@ class WebServer {
                             var j=0
                             let maxNum = (offset + WebServer.main.returnSize) > CloudStorage.main.database.count ? CloudStorage.main.database.count : (offset + WebServer.main.returnSize)
                             for i in offset...maxNum {
-                                let fullGameJSON = array[i]
-                                if let id = fullGameJSON["id"] as? Int64 {
-                                    if let miniGame = CloudStorage.main.miniGameDatabase[String(id)] {
-                                        returnArray.append(miniGame)
-                                        j+=1
+                                if array.count > i {
+                                    let fullGameJSON = array[i]
+                                    if let id = fullGameJSON["id"] as? Int64 {
+                                        if let miniGame = CloudStorage.main.miniGameDatabase[String(id)] {
+                                            returnArray.append(miniGame)
+                                            j+=1
+                                        }
                                     }
                                 }
                             }
@@ -146,11 +148,13 @@ class WebServer {
                             var j=0
                             let maxNum = (offset + WebServer.main.returnSize) > CloudStorage.main.database.count ? CloudStorage.main.database.count : (offset + WebServer.main.returnSize)
                             for i in offset...maxNum {
-                                let fullGameJSON = array[i]
-                                if let id = fullGameJSON["id"] as? Int64 {
-                                    if let miniGame = CloudStorage.main.miniGameDatabase[String(id)] {
-                                        returnArray.append(miniGame)
-                                        j+=1
+                                if array.count > i {
+                                    let fullGameJSON = array[i]
+                                    if let id = fullGameJSON["id"] as? Int64 {
+                                        if let miniGame = CloudStorage.main.miniGameDatabase[String(id)] {
+                                            returnArray.append(miniGame)
+                                            j+=1
+                                        }
                                     }
                                 }
                             }
@@ -210,9 +214,9 @@ class WebServer {
                                     }
                                     var returnArray = [[String:Any]]()
                                     let maxNum = (offset + WebServer.main.returnSize) > CloudStorage.main.database.count ? CloudStorage.main.database.count : (offset + WebServer.main.returnSize)
-                                    if array.count > 0 {
-                                        for i in offset...maxNum {
-                                            print("array size: " + String(array.count))
+                                    for i in offset...maxNum {
+                                        print("array size: " + String(array.count))
+                                        if array.count > i {
                                             let fullGameJSON = array[i]
                                             if let id = fullGameJSON["id"] as? Int64 {
                                                 if let miniGame = CloudStorage.main.miniGameDatabase[String(id)] {
