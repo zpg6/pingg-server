@@ -12,7 +12,6 @@ class WebServer {
     
     static let main = WebServer()
     var server = GCDWebServer()
-    let returnSize = 7
     
     class func startup() {
         WebServer.main.server.addDefaultHandler(forMethod: "GET", request: GCDWebServerRequest.self, processBlock: {request in
@@ -84,23 +83,21 @@ class WebServer {
                 let data = requestData.data
                 if let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments){
                     if let dict = json as? [String:Any] {
-                        if let offset = dict["offset"] as? Int {
-                            let database = CloudStorage.main.database
-                            let array = database.map({$0.value}).sorted(by: {Game.from($0)!.rating > Game.from($1)!.rating})
-                            var returnArray: [[String:Any]] = []
-                            var j=0
-                            let maxNum = (offset + WebServer.main.returnSize) > CloudStorage.main.database.count ? CloudStorage.main.database.count : (offset + WebServer.main.returnSize)
-                            for i in offset...maxNum {
-                                if array.count > i {
-                                    let fullGameJSON = array[i]
-                                    if let id = fullGameJSON["id"] as? Int64 {
-                                        if let miniGame = CloudStorage.main.miniGameDatabase[String(id)] {
-                                            returnArray.append(miniGame)
-                                            j+=1
-                                        }
+                        let database = CloudStorage.main.database
+                        let array = database.map({$0.value}).sorted(by: {Game.from($0)!.rating > Game.from($1)!.rating})
+                        var returnArray: [[String:Any]] = []
+                        var j=0
+                        if array.count != 0 {
+                            for i in 0...array.count - 1 {
+                                let fullGameJSON = array[i]
+                                if let id = fullGameJSON["id"] as? Int64 {
+                                    if let miniGame = CloudStorage.main.miniGameDatabase[String(id)] {
+                                        returnArray.append(miniGame)
+                                        j+=1
                                     }
                                 }
                             }
+                        }
                             
 
                             let response = GCDWebServerDataResponse(jsonObject: returnArray)
@@ -111,9 +108,6 @@ class WebServer {
                                         print("Error adding headers")
                                     }
                                     return response
-                        } else {
-                            return GCDWebServerErrorResponse(text: "Missing Offset Field")?.addHeaders()
-                        }
                     } else {
                         return GCDWebServerErrorResponse(text: "Could not cast data.")?.addHeaders()
                     }
@@ -141,23 +135,21 @@ class WebServer {
                 let data = requestData.data
                 if let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments){
                     if let dict = json as? [String:Any] {
-                        if let offset = dict["offset"] as? Int {
-                            let database = CloudStorage.main.database
-                            let array = database.map({$0.value}).sorted(by: {Game.from($0)!.ratingCount > Game.from($1)!.ratingCount})
-                            var returnArray: [[String:Any]] = []
-                            var j=0
-                            let maxNum = (offset + WebServer.main.returnSize) > CloudStorage.main.database.count ? CloudStorage.main.database.count : (offset + WebServer.main.returnSize)
-                            for i in offset...maxNum {
-                                if array.count > i {
-                                    let fullGameJSON = array[i]
-                                    if let id = fullGameJSON["id"] as? Int64 {
-                                        if let miniGame = CloudStorage.main.miniGameDatabase[String(id)] {
-                                            returnArray.append(miniGame)
-                                            j+=1
-                                        }
+                        let database = CloudStorage.main.database
+                        let array = database.map({$0.value}).sorted(by: {Game.from($0)!.ratingCount > Game.from($1)!.ratingCount})
+                        var returnArray: [[String:Any]] = []
+                        var j=0
+                        if array.count != 0 {
+                            for i in 0...array.count - 1 {
+                                let fullGameJSON = array[i]
+                                if let id = fullGameJSON["id"] as? Int64 {
+                                    if let miniGame = CloudStorage.main.miniGameDatabase[String(id)] {
+                                        returnArray.append(miniGame)
+                                        j+=1
                                     }
                                 }
                             }
+                        }
                             
 
                             let response = GCDWebServerDataResponse(jsonObject: returnArray)
@@ -168,9 +160,6 @@ class WebServer {
                                         print("Error adding headers")
                                     }
                                     return response
-                        } else {
-                            return GCDWebServerErrorResponse(text: "Missing Offset Field")?.addHeaders()
-                        }
                     } else {
                         return GCDWebServerErrorResponse(text: "Could not cast data.")?.addHeaders()
                     }
@@ -202,33 +191,28 @@ class WebServer {
                     if let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments){
                         if let dict = json as? [String:Any] {
                             if let genre = dict["genre"] as? String {
-                                if let offset = dict["offset"] as? Int {
-                                    var array : [[String:Any]] = []
-                                    let database = CloudStorage.main.database
-                                    for (_, value) in database {
-                                        if let genres = value["genres"] as? Array<String> {
-                                            if genres.contains(genre) {
-                                                array.append(value)
-                                            }
+                                var array : [[String:Any]] = []
+                                let database = CloudStorage.main.database
+                                for (_, value) in database {
+                                    if let genres = value["genres"] as? Array<String> {
+                                        if genres.contains(genre) {
+                                            array.append(value)
                                         }
                                     }
-                                    var returnArray = [[String:Any]]()
-                                    let maxNum = (offset + WebServer.main.returnSize) > CloudStorage.main.database.count ? CloudStorage.main.database.count : (offset + WebServer.main.returnSize)
-                                    for i in offset...maxNum {
-                                        print("array size: " + String(array.count))
-                                        if array.count > i {
-                                            let fullGameJSON = array[i]
-                                            if let id = fullGameJSON["id"] as? Int64 {
-                                                if let miniGame = CloudStorage.main.miniGameDatabase[String(id)] {
-                                                    returnArray.append(miniGame)
-                                                }
-                                            }
-                                        }
-                                    }
-                                    return GCDWebServerDataResponse(jsonObject: returnArray)?.addHeaders()
-                                } else {
-                                    return GCDWebServerErrorResponse(text: "Missing Offset Field")?.addHeaders()
                                 }
+                                var returnArray = [[String:Any]]()
+                                if array.count != 0 {
+                                    for i in 0...array.count - 1 {
+                                        print("array size: " + String(array.count))
+                                        let fullGameJSON = array[i]
+                                        if let id = fullGameJSON["id"] as? Int64 {
+                                        if let miniGame = CloudStorage.main.miniGameDatabase[String(id)] {
+                                            returnArray.append(miniGame)
+                                            }
+                                        }
+                                    }
+                                }
+                                return GCDWebServerDataResponse(jsonObject: returnArray)?.addHeaders()
                             } else {
                                 return GCDWebServerErrorResponse(text: "Missing Genre Field")?.addHeaders()
                             }
