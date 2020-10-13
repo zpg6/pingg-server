@@ -59,6 +59,18 @@ class CloudStorage {
                             print("couldn't get gameData from string for index=\(index)")
                         }
                     }
+                    for (key, value) in CloudStorage.main.database {
+                        if let similarGames = value["similarGames"] as? Array<Int64> {
+                            for similarGame in similarGames {
+                                if !CloudStorage.main.database.keys.contains(String(similarGame)) {
+                                    let tempArray = CloudStorage.main.database[key]?["similarGames"] as? Array<Int64>
+                                    CloudStorage.main.database[key]?["similarGames"] = tempArray?.filter({
+                                        $0 != similarGame
+                                    })
+                                }
+                            }
+                        }
+                    }
                     CloudStorage.main.lastUpdated = Date()
                 } else {
                     print("couldn't decode JSON into an array of strings")

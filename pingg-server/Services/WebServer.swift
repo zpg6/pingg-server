@@ -88,7 +88,7 @@ class WebServer {
                         var returnArray: [[String:Any]] = []
                         var j=0
                         if array.count != 0 {
-                            for i in 0...array.count - 1 {
+                            for i in 0..<50 {
                                 let fullGameJSON = array[i]
                                 if let id = fullGameJSON["id"] as? Int64 {
                                     if let miniGame = CloudStorage.main.miniGameDatabase[String(id)] {
@@ -140,7 +140,7 @@ class WebServer {
                         var returnArray: [[String:Any]] = []
                         var j=0
                         if array.count != 0 {
-                            for i in 0...array.count - 1 {
+                            for i in 0..<50 {
                                 let fullGameJSON = array[i]
                                 if let id = fullGameJSON["id"] as? Int64 {
                                     if let miniGame = CloudStorage.main.miniGameDatabase[String(id)] {
@@ -249,6 +249,7 @@ class WebServer {
                         if let dict = json as? [String:Any] {
                             if let game = Game.from(dict) {
                                 CloudStorage.main.database[String(game.id)] = game.json
+                                CloudStorage.upload()
                                 return GCDWebServerDataResponse(jsonObject: game.json)?.addHeaders()
                             } else {
                                 return GCDWebServerErrorResponse(text: "Missing ID field")?.addHeaders()
@@ -264,6 +265,44 @@ class WebServer {
                 }
             }
         
+        
+        WebServer.main.server.addHandler(forMethod: "OPTIONS", path: "/game/querybyid", request: GCDWebServerDataRequest.self) { (request) -> GCDWebServerDataResponse? in
+                let response = GCDWebServerDataResponse(jsonObject: [:])
+                if let response = response?.addHeaders() {
+                    return response
+                } else {
+                    print("Error adding headers")
+                }
+                return response
+            }
+
+            WebServer.main.server.addHandler(forMethod: "POST", path: "/game/querybyid", request: GCDWebServerDataRequest.self) { (request) -> GCDWebServerDataResponse? in
+
+                print(request)
+
+                if let requestData = request as? GCDWebServerDataRequest {
+                    let data = requestData.data
+                    if let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments){
+                        if let dict = json as? [String:Any] {
+                            if let genre = dict["id"] as? String {
+                                if let game = CloudStorage.main.database[String(genre)] {
+                                    return GCDWebServerDataResponse(jsonObject: game)?.addHeaders()
+                                } else {
+                                    return GCDWebServerErrorResponse(text: "Game does not exist.")?.addHeaders()
+                                }
+                            } else {
+                                return GCDWebServerErrorResponse(text: "Missing id Field.")?.addHeaders()
+                            }
+                        } else {
+                            return GCDWebServerErrorResponse(text: "Could not cast data.")?.addHeaders()
+                        }
+                    } else {
+                        return GCDWebServerErrorResponse(text: "Could not serialize data.")?.addHeaders()
+                    }
+                } else {
+                    return GCDWebServerErrorResponse(text: "Could not cast data.")?.addHeaders()
+                }
+            }
         
         
         
